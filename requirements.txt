@@ -5,3 +5,4 @@ langchain-google-genai==1.0.1
 chromadb==0.4.24
 pypdf==4.1.0
 python-dotenv==1.0.1
+pillow==10.2.0
