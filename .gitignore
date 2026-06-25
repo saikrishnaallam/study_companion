@@ -1,0 +1,23 @@
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment variables (Sensitive)
+.env
+
+# Streamlit temporary files
+temp.pdf
+*.pdf
+
+# Vector database storage
+chroma_db/
+
+# OS files
+.DS_Store
