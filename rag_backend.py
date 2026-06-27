@@ -6,8 +6,26 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_google_genai import GoogleGenerativeAIEmbeddings, ChatGoogleGenerativeAI
 from langchain_community.vectorstores import Chroma
 from langchain_core.prompts import PromptTemplate
-from langchain.chains import create_retrieval_chain
-from langchain.chains.combine_documents import create_stuff_documents_chain
+
+# Version-robust imports for retrieval chains
+try:
+    from langchain.chains import create_retrieval_chain
+except ImportError:
+    try:
+        from langchain.chains.retrieval import create_retrieval_chain
+    except ImportError:
+        try:
+            from langchain_classic.chains import create_retrieval_chain
+        except ImportError:
+            raise ImportError("Could not import create_retrieval_chain. Please verify langchain installation.")
+
+try:
+    from langchain.chains.combine_documents import create_stuff_documents_chain
+except ImportError:
+    try:
+        from langchain_classic.chains.combine_documents import create_stuff_documents_chain
+    except ImportError:
+         raise ImportError("Could not import create_stuff_documents_chain. Please verify langchain installation.")
 
 load_dotenv()
 
