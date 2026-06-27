@@ -68,13 +68,20 @@ if st.session_state.db is not None:
                 
                 # Format and display the citations in a dropdown
                 with st.expander("🔍 View Source Citations"):
-                    for i, doc in enumerate(source_docs):
-                        # Extract the filename and page number from the metadata
-                        source_file = os.path.basename(doc.metadata.get('source', 'Unknown File'))
+                    seen_sources = set()
+                    source_count = 1
+                    for doc in source_docs:
+                        # Strip the temp_ prefix we use for temporary storage
+                        source_file = os.path.basename(doc.metadata.get('source', 'Unknown File')).replace("temp_", "")
                         page_num = doc.metadata.get('page', 'Unknown Page')
+                        source_key = (source_file, page_num)
                         
-                        st.markdown(f"**Source {i+1}:** {source_file} (Page {page_num})")
-                        st.caption(doc.page_content[:200] + "...") # Show a tiny snippet
+                        # Only show unique source file + page combinations to avoid clutter
+                        if source_key not in seen_sources:
+                            seen_sources.add(source_key)
+                            st.markdown(f"**Source {source_count}:** {source_file} (Page {page_num})")
+                            st.caption(doc.page_content[:200] + "...")
+                            source_count += 1
             
             # Save the full response (including markdown citations) to history
             full_response = f"{answer}\n\n*(Check citations for details)*"

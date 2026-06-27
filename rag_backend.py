@@ -80,7 +80,8 @@ def ask_question(question, db):
     llm = ChatGoogleGenerativeAI(model="gemini-flash-latest", temperature=0)
 
     template = """
-    You are a helpful study assistant. Use the following pieces of retrieved context to answer the question. 
+    You are a helpful study assistant. Use the following pieces of retrieved context from one or more documents to answer the question. 
+    If the context contains information from different files, make sure to synthesize and incorporate the information from all relevant documents in your answer.
     If you don't know the answer, just say that you don't know. 
 
     Context: {context}
@@ -92,7 +93,8 @@ def ask_question(question, db):
     prompt = PromptTemplate.from_template(template)
 
     combine_docs_chain = create_stuff_documents_chain(llm, prompt)
-    retriever = db.as_retriever(search_kwargs={"k": 3}) 
+    # Increase retrieved context size to k=15 to ensure chunks from all uploaded files are fetched
+    retriever = db.as_retriever(search_kwargs={"k": 15}) 
     retrieval_chain = create_retrieval_chain(retriever, combine_docs_chain)
 
     print(f"Thinking about: '{question}'...")
