@@ -1,4 +1,5 @@
 import os
+import time
 from dotenv import load_dotenv
 
 from langchain_community.document_loaders import PyPDFLoader
@@ -58,10 +59,23 @@ def load_and_chunk_multiple_pdfs(file_paths):
     return all_chunks
 
 def create_vector_database(chunks):
-    # (This function stays EXACTLY the same as Version 1.0)
+    """Creates embeddings in batches to prevent 429 rate limit errors."""
     print("Creating embeddings and building Vector Database...")
     embeddings_model = GoogleGenerativeAIEmbeddings(model="models/gemini-embedding-001")
-    db = Chroma.from_documents(chunks, embeddings_model, persist_directory="./chroma_db")
+    
+    # Batch chunks into groups of 50 to respect Gemini API request limits (max 100/req)
+    batch_size = 50
+    first_batch = chunks[:batch_size]
+    
+    db = Chroma.from_documents(first_batch, embeddings_model, persist_directory="./chroma_db")
+    
+    # Process remaining chunks with a delay to stay below the requests-per-minute limits
+    for i in range(batch_size, len(chunks), batch_size):
+        print(f"Embedding batch {i // batch_size + 1}... (waiting 2 seconds to avoid rate limits)")
+        time.sleep(2)
+        batch = chunks[i : i + batch_size]
+        db.add_documents(batch)
+        
     return db
 
 def ask_question(question, db):
