@@ -12,7 +12,7 @@ An AI-powered Retrieval-Augmented Generation (RAG) web application that lets you
 *   **Vector Database Store**: Builds a local vector store using **ChromaDB** with **Hugging Face embeddings** (`all-MiniLM-L6-v2`) to index the document chunks locally (100% free, no rate limits).
 *   **Conversational Chat History**: Features an interactive chat-style UI using Streamlit's native `st.chat_message` and `st.chat_input` widgets, allowing you to ask questions and see message history.
 *   **Source Citations**: For every answer, the AI displays the exact source documents and page numbers used to construct the response in an expandable dropdown.
-*   **Factual Q&A Brain**: Connects with the **Gemini 2.5 Flash** model via LangChain to answer questions strictly based on the context retrieved from the PDFs.
+*   **Factual Q&A Brain**: Connects with the **Gemini 1.5 Flash** model (via the stable `gemini-flash-latest` endpoint) via LangChain to answer questions strictly based on the context retrieved from the PDFs.
 *   **Version-Robust Imports**: Includes custom import fallback logic to handle package namespace differences between LangChain v0.1, v0.2, v0.3, and v1.x, ensuring seamless zero-configuration cloud deployment.
 *   **Secure Config**: Excludes private documents, databases, and sensitive API keys (`.env`) from GitHub, utilizing Streamlit Secrets in the cloud deployment.
 
