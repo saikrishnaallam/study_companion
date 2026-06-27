@@ -9,7 +9,7 @@ An AI-powered Retrieval-Augmented Generation (RAG) web application that lets you
 ## 🌟 Features
 
 *   **Multi-PDF Processing & Chunking**: Upload multiple PDFs at once. The application extracts text from all documents and aggregates them using LangChain's `PyPDFLoader` and `RecursiveCharacterTextSplitter`.
-*   **Vector Database Store**: Builds a local vector store using **ChromaDB** with Google Gemini embeddings (`models/gemini-embedding-001`) to index the document chunks.
+*   **Vector Database Store**: Builds a local vector store using **ChromaDB** with **Hugging Face embeddings** (`all-MiniLM-L6-v2`) to index the document chunks locally (100% free, no rate limits).
 *   **Conversational Chat History**: Features an interactive chat-style UI using Streamlit's native `st.chat_message` and `st.chat_input` widgets, allowing you to ask questions and see message history.
 *   **Source Citations**: For every answer, the AI displays the exact source documents and page numbers used to construct the response in an expandable dropdown.
 *   **Factual Q&A Brain**: Connects with the **Gemini 1.5 Flash** model via LangChain to answer questions strictly based on the context retrieved from the PDFs.
@@ -36,7 +36,7 @@ study_companion/
 
 1. **Document Upload**: The user uploads one or more PDFs using the sidebar in the Streamlit interface (`app.py`).
 2. **Text Chunking**: The backend (`rag_backend.py`) reads each PDF, splits it into chunks of 1000 characters with a 200-character overlap, and aggregates them into a master list of chunks.
-3. **Embeddings & Vector Database**: The chunks are converted into vector embeddings using Google Generative AI and stored in a local **Chroma** database.
+3. **Embeddings & Vector Database**: The chunks are converted into vector embeddings locally using the Hugging Face `all-MiniLM-L6-v2` sentence-transformer model and stored in a local **Chroma** database. Since embeddings run locally, there are **no API quotas or 429 rate limit errors** for processing large documents.
 4. **Retrieval**: When a question is asked, Chroma retrieves the top 3 most relevant text chunks matching the query.
 5. **Contextual Answer & Sources**: The retrieved chunks are formatted into a strict prompt template and sent to Gemini, which replies with a factual answer. The app returns both the answer and the metadata (filenames and page numbers) of the referenced chunks.
 6. **Chat Rendering**: The answer is rendered in the chat window, and the page sources are displayed in an expandable "🔍 View Source Citations" dropdown.
