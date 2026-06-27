@@ -62,6 +62,11 @@ def load_and_chunk_multiple_pdfs(file_paths):
 def create_vector_database(chunks):
     """Creates embeddings locally using HuggingFace sentence-transformers (rate-limit free)."""
     import shutil
+    import chromadb
+    
+    # Clear stale system client caches to prevent "Could not connect to tenant default_tenant" errors on Streamlit Cloud
+    chromadb.api.client.SharedSystemClient.clear_system_cache()
+    
     if os.path.exists("./chroma_db"):
         shutil.rmtree("./chroma_db")
         
