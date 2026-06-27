@@ -61,6 +61,10 @@ def load_and_chunk_multiple_pdfs(file_paths):
 
 def create_vector_database(chunks):
     """Creates embeddings locally using HuggingFace sentence-transformers (rate-limit free)."""
+    import shutil
+    if os.path.exists("./chroma_db"):
+        shutil.rmtree("./chroma_db")
+        
     print("Creating local embeddings and building Vector Database...")
     embeddings_model = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
     db = Chroma.from_documents(chunks, embeddings_model, persist_directory="./chroma_db")
