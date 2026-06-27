@@ -77,7 +77,7 @@ def create_vector_database(chunks):
 
 def ask_question(question, db):
     """Answers the question AND returns the source citations."""
-    llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0)
+    llm = ChatGoogleGenerativeAI(model="gemini-flash-latest", temperature=0)
 
     template = """
     You are a helpful study assistant. Use the following pieces of retrieved context to answer the question. 
