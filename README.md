@@ -13,9 +13,10 @@ An AI-powered Retrieval-Augmented Generation (RAG) web application that lets you
 *   **Conversational Chat UI**: Transitioned from standard input text fields to Streamlit's native `st.chat_message` and `st.chat_input` conversational UI with persistent chat history.
 *   **Local Embeddings (100% Rate-Limit Free)**: Switched the vector indexing pipeline to use **Hugging Face's `all-MiniLM-L6-v2`** local embeddings model. This completely bypassed Google API's 429 quota limits for embedding generation.
 *   **High-Quota LLM Chat**: Switched the chat engine to the stable **`gemini-flash-latest` (Gemini 1.5 Flash)** model, giving the app a generous free tier of **1,500 requests per day** (replaces the restricted 20 requests/day preview tier of 2.5).
-*   **Deduplicated Citations**: Added an expandable dropdown that groups and displays the source files and exact page numbers referenced by the model.
+*   **Deduplicated Citations**: Added an expandable dropdown that groups and displays the source files and exact page numbers referenced by the model, stripping temporary `temp_` prefixes for a cleaner UI.
 *   **Multi-Document Synthesis**: Expanded search window size to `k=15` and updated the prompt templates to instruct the model to synthesize answers across multiple files.
 *   **Streamlit Cloud Stability**: Implemented custom system client cache clearing for ChromaDB to resolve tenant connection issues in serverless builds.
+*   **Watcher Optimization**: Explicitly pinned `torch` and `torchvision` in dependencies to satisfy the model scanner in Streamlit's local source file watcher.
 
 ### 📜 Version 1.0 (Initial Release)
 *   **Single-PDF Q&A**: Supported processing a single PDF document at a time.
