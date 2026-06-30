@@ -108,3 +108,24 @@ To host this application yourself on Streamlit Community Cloud:
    GOOGLE_API_KEY = "your-actual-api-key"
    ```
 4. Deploy the app. Streamlit will install packages from `requirements.txt` and launch automatically!
+
+---
+
+## 🛠️ Troubleshooting
+
+### 1. `ValueError: Could not connect to tenant default_tenant`
+*   **Cause**: This occurs on Streamlit Cloud or container reloads when ChromaDB's `SharedSystemClient` holds onto stale connection cache handlers.
+*   **Resolution**: The application automatically calls `chromadb.api.client.SharedSystemClient.clear_system_cache()` before building the database to ensure connection persistence.
+
+### 2. `ModuleNotFoundError: No module named 'torchvision'`
+*   **Cause**: Streamlit's local source file watcher scans dependencies like `transformers`, which dynamically imports vision model classes that require `torchvision`.
+*   **Resolution**: We explicitly pinned `torch` and `torchvision` in `requirements.txt` to satisfy the watcher scanner and prevent warnings in your logs.
+
+### 3. Google API `429 Quota Exceeded`
+*   **Cause**: Generating embeddings for large or multiple PDF files via Google's free embedding endpoints easily hits rate limits.
+*   **Resolution**: The app uses local Hugging Face embeddings (`all-MiniLM-L6-v2`), running vector calculations locally on the server CPU. This is 100% free and has no API quotas.
+
+### 4. `Processed 0 total chunks` / Empty Chat Context
+*   **Cause**: The uploaded PDF is a scanned document (images of text) or is empty. `PyPDFLoader` requires digitally-selectable text to build the database.
+*   **Resolution**: Use digitally created PDF files or OCR-processed PDF documents.
+
